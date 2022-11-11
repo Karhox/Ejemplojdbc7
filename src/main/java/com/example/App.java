@@ -82,8 +82,16 @@ public class App {
 
         Product p = new Product(0, reference, name, price, category);
         Product insertedProduct = prodDao.insert(p);
-        System.out.println("Categoría insertada: " + insertedProduct);
+        System.out.println("Propducto insertado: " + insertedProduct);
 
+    }
+
+    
+    public static void borrarProducto() {
+        mostrarProductos();
+        System.out.print("Producto a borrar: ");
+        int idProd = Integer.parseInt(System.console().readLine());
+        prodDao.delete(idProd);
     }
 
     public static void showMenu() {

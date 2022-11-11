@@ -49,17 +49,30 @@ public class ProductDAOMariaDB implements ProductDAO {
             stProd.setDouble(3, p.getPrice());
             stProd.setInt(4, p.getCategory());
             stProd.executeUpdate();
-            ResultSet rs = stProd.getGeneratedKeys();
+            ResultSet rs = stProd.getGeneratedKeys(); //clave primaria generada
             rs.first();
-            p = new Product(rs.getInt("id"), rs.getString("reference"), rs.getString("name"), rs.getDouble("price"), rs.getInt("category"));
+            int idProd = rs.getInt(1);
+            p = new Product(idProd, rs.getString("reference"), rs.getString("name"), rs.getDouble("price"), rs.getInt("category"));
 
         } catch(SQLException e) {
             System.err.println(e.getMessage());
         }
         return p;
-  
-            
-       
+    }
+
+    public boolean delete(int idProd) {
+        boolean borrado = false;
+        try (Connection conn = pcon.getConnection()) {
+            PreparedStatement st = conn.prepareStatement("DELETE FROM product WHERE id = ?");
+            st.setInt(1, idProd);
+            int filas = st.executeUpdate();
+            borrado = filas > 0;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+        return borrado;
     }
 }
+
 
